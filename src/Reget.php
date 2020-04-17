@@ -101,7 +101,7 @@ class Reget
             $hosts = json_decode($this->init()->server($name), true)['hosts'];
             if ($hosts) {
                 if ($random) {
-                    $host = array_rand($hosts);
+                    $host = Arr::random($hosts);
                     return $host['port'] == '80' ? $host['ip'] : $host['ip'] . ':' . $host['port'];
                 }
                 foreach ($hosts as $host) {
