@@ -1,0 +1,31 @@
+{
+    "name": "overlu/laravel-reget",
+    "description": "laravel server register in nacos or other",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lupeng",
+            "email": "lupeng.me@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Overlu\\Reget\\": "src/"
+        },
+        "classmap": [
+        ],
+        "files": [
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Overlu\\Reget\\RegetServiceProvider"
+            ]
+        }
+    }
+}
