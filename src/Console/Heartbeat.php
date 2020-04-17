@@ -37,7 +37,7 @@ class Heartbeat extends Command
     public function handle()
     {
         try {
-            Reget::getInstance()->init()->heartbeat();
+            echo Reget::getInstance()->init()->heartbeat();
         } catch (\Exception $exception) {
             $this->error("service heartbeat failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }

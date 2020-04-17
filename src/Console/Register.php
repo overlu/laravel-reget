@@ -37,7 +37,7 @@ class Register extends Command
     public function handle()
     {
         try {
-            Reget::getInstance()->init()->register();
+            echo Reget::getInstance()->init()->register();
         } catch (\Exception $exception) {
             $this->error("register service failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
