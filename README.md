@@ -1,3 +1,22 @@
+### 前言
+#### 项目介绍
+`overlu/laravel-reget` 是一款基于laravel的nacos扩展
+
+#### 安装
+
+``` php
+php composer.phar require overlu/laravel-reget
+# publish config
+php artisan vendor:publish --provider="Overlu\Reget\RegetServiceProvider"
+# laravel5.5以前，安装好Reget扩展后，打开 config/app.php，注册如下服务提供者到 $providers 数组：
+Overlu\Reget\RegetServiceProvider::class
+# 然后添加如下门面到 $aliaes 数组：
+'Reget' => \Overlu\Reget\Facades\Reget::class
+```
+
+#### 配置
+```php
+<?php
 <?php
 return [
     'driver' => 'nacos',
@@ -17,3 +36,14 @@ return [
         'scheduled' => env('NACOS_SERVICE_SCHEDULED',true)
     ]
 ];
+```
+
+#### Usage
+* ##### 配置
+修改配置文件`reget.php`，根据参数说明修改相关参数，或者`在.env文件中加入相关参数配置(建议)`
+
+* ##### 获取服务
+```php
+$service=\Overlu\Reget\Reget::getInstance()->service('service_name');
+return $service;
+```
