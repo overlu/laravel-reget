@@ -42,6 +42,28 @@ return [
 * ##### 配置
 修改配置文件`reget.php`，根据参数说明修改相关参数，或者`在.env文件中加入相关参数配置(建议)`
 
+* #### 常用命令
+```php
+// 注册服务
+php artisan reget:register
+// 发送心跳
+php artisan reget:heartbeat
+// 查看服务列表
+php artisan reget:list
+// 移除服务
+php artisan reget:remove
+```
+定时发送心跳：
+```php
+// 1. 下面的 Cron 添加到你的服务器中
+* * * * * cd /path-to-your-project && php artisan schedule:run >>/dev/null 2>&1
+// 2. 在 App\Console\Kernel 类的 schedule 方法中定义所有的调度任务
+protected function schedule(Schedule $schedule)
+{
+    $schedule->command('reget:heartbeat')->everyFiveMinutes();
+}
+```
+
 * ##### 获取服务
 ```php
 $service=\Overlu\Reget\Reget::getInstance()->service('service_name');
