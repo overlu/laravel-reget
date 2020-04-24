@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Overlu\Reget;
 
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
