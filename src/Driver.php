@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Overlu\Reget;
-
 
 interface Driver
 {
