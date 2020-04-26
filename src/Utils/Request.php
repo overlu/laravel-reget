@@ -13,14 +13,16 @@ class Request
      * post请求
      * @param string $url
      * @param array $data
-     * @return bool|mixed|string
+     * @param array $headers
+     * @return string
      */
-    public static function post(string $url, array $data = [])
+    public static function post(string $url, array $data = [], array $headers = [])
     {
         $result = (new Client([
-            'timeout' => 5.0
+//            'timeout' => 5.0
         ]))->request('POST', $url, [
             'form_params' => $data,
+            'headers' => $headers
         ]);
         return $result->getBody()->getContents();
     }
@@ -44,14 +46,17 @@ class Request
     /**
      * get请求
      * @param string $url
-     * @return bool|mixed|string
+     * @param array $data
+     * @param array $headers
+     * @return string
      */
-    public static function get(string $url, array $data = [])
+    public static function get(string $url, array $data = [], array $headers = [])
     {
         $result = (new Client([
             'timeout' => 5.0
         ]))->request('GET', $url, [
             'query' => $data,
+            'headers' => $headers
         ]);
         return $result->getBody()->getContents();
     }
@@ -59,14 +64,18 @@ class Request
     /**
      * put请求
      * @param string $url
-     * @return bool|mixed|string
+     * @param array $data
+     * @param array $headers
+     * @return string
      */
-    public static function put(string $url, array $data = [])
+    public static function put(string $url, array $data = [], array $headers = [])
     {
         $url = $data ? $url . '?' . http_build_query($data) : $url;
         $result = (new Client([
             'timeout' => 5.0
-        ]))->request('PUT', $url);
+        ]))->request('PUT', $url, [
+            'headers' => $headers
+        ]);
         return $result->getBody()->getContents();
     }
 }

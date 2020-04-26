@@ -8,6 +8,7 @@ trait Base
 {
     private $service;
     private $host;
+    private $config;
 
     public function __construct($config)
     {

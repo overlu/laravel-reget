@@ -20,7 +20,7 @@ class RegetServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('reget', function ($app) {
-            return new Reget();
+            return Reget::getInstance();
         });
     }
 

@@ -19,13 +19,6 @@ interface Driver
      */
     public function register();
 
-
-    /**
-     * 获取配置
-     * @return mixed
-     */
-    public function config();
-
     /**
      * 心跳
      * @return mixed
