@@ -1,10 +1,15 @@
 <?php
+
 namespace Overlu\Reget;
 
+
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Overlu\Reget\Utils\Command;
 use Overlu\Reget\Utils\ConfigCache;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class Reget
 {
@@ -163,7 +168,7 @@ class Reget
      * @param $dataId
      * @param string $group
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function config($dataId, $group = 'DEFAULT_GROUP')
     {
@@ -204,7 +209,7 @@ class Reget
      * 监听配置
      * @param string $dataId
      * @param string $group
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function listen(string $dataId, string $group = 'DEFAULT_GROUP')
     {
@@ -212,16 +217,28 @@ class Reget
         while (true) {
             try {
                 $num++;
-                $content = ConfigCache::get($dataId, $group);
+                $content = $this->config($dataId, $group);
                 if ($this->init()->listen($dataId, $content, $group)) { // 配置发生了变化
                     $config = $this->init()->config($dataId, $group);
                     ConfigCache::set($dataId, $group, $config);
-                    Log::info("【 Reget 】发现变更配置：" . $dataId . ":" . $content . " => " . $config);
+                    $message = "【Reget】发现变更配置：" . $dataId . " :" . $content . " => " . $config;
+                    Log::info($message);
+                    if (App::runningInConsole()) {
+                        Command::info($message);
+                    }
                 }
             } catch (\Exception $exception) {
-                Log::error("【Reget】请求异常：" . $exception->getMessage());
+                $message = "【Reget】请求异常：" . trim($exception->getMessage());
+                Log::error($message);
+                if (App::runningInConsole()) {
+                    Command::error($message);
+                }
+                break;
             }
             Log::info("【Reget】监听次数：" . $num);
+            if (App::runningInConsole()) {
+                Command::info("【Reget】监听次数：" . $num);
+            }
         }
     }
 }

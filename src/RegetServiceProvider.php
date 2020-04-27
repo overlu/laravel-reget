@@ -4,6 +4,7 @@ namespace Overlu\Reget;
 
 use Illuminate\Support\ServiceProvider;
 use Overlu\Reget\Console\Heartbeat;
+use Overlu\Reget\Console\Listen;
 use Overlu\Reget\Console\Lists;
 use Overlu\Reget\Console\Register;
 use Overlu\Reget\Console\Remove;
@@ -34,7 +35,7 @@ class RegetServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/reget.php' => config_path('reget.php'), // 发布配置文件到 laravel 的config 下
         ]);
-        $this->commands([Register::class, Heartbeat::class, Remove::class, Lists::class]);
+        $this->commands([Register::class, Heartbeat::class, Remove::class, Lists::class, Listen::class]);
     }
 
     public function provides()

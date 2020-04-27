@@ -17,7 +17,6 @@ Overlu\Reget\RegetServiceProvider::class
 #### 配置
 ```php
 <?php
-<?php
 return [
     'driver' => 'nacos',
     'nacos' => [
