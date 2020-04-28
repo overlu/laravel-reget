@@ -85,7 +85,7 @@ class Reget
      * @return array
      * @throws Exception
      */
-    public function lists()
+    public function services(): array
     {
         $lists = json_decode($this->init()->services(), true);
         if (!empty($lists)) {
@@ -138,16 +138,17 @@ class Reget
     /**
      * 获取配置数据
      * @param $dataId
+     * @param bool $cache
      * @param string $group
      * @return mixed
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function config($dataId, $group = '')
+    public function config($dataId, $cache = true, $group = '')
     {
         $group = $group ?: $this->getConfig('groupName');
         $config = ConfigCache::get($dataId, $group);
-        if (!$config) {
+        if (!$config || !$cache) {
             $config = $this->init()->config($dataId, $group);
             ConfigCache::set($dataId, $group, $config);
         }
