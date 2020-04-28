@@ -13,7 +13,7 @@ return [
         'clusterName' => env('NACOS_SERVICE_CLUSTER_NAME', ''),  // 集群名
         'serviceName' => env('NACOS_SERVICE_NAME', 'server_name'), // 服务名
         'groupName' => env('NACOS_SERVICE_GROUP_NAME', ''),  // 分组名
-        'ephemeral' => env('NACOS_SERVICE_EPHEMERAL', 'false'), // 是否临时实例
+        'ephemeral' => env('NACOS_SERVICE_EPHEMERAL', 'true'), // 是否临时实例
         'scheduled' => env('NACOS_SERVICE_SCHEDULED', 'true')
     ]
 ];
