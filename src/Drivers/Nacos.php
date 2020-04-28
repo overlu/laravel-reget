@@ -4,7 +4,6 @@
 namespace Overlu\Reget\Drivers;
 
 use Overlu\Reget\Driver;
-use Overlu\Reget\Utils\ConfigCache;
 use Overlu\Reget\Utils\Request;
 
 class Nacos implements Driver
@@ -14,8 +13,8 @@ class Nacos implements Driver
     //service
     protected $instance_uri = '/nacos/v1/ns/instance';
     protected $heartbeat_uri = '/nacos/v1/ns/instance/beat';
-    protected $serverlist_uri = '/nacos/v1/ns/service/list';
-    protected $instancelist_uri = '/nacos/v1/ns/instance/list';
+    protected $server_list_uri = '/nacos/v1/ns/service/list';
+    protected $instance_list_uri = '/nacos/v1/ns/instance/list';
 
     // config
     protected $config_uri = '/nacos/v1/cs/configs';
@@ -84,7 +83,7 @@ class Nacos implements Driver
      */
     public function servers()
     {
-        return Request::get($this->host . $this->serverlist_uri, [
+        return Request::get($this->host . $this->server_list_uri, [
             'pageNo' => 1,
             'pageSize' => 99999
         ]);
@@ -97,7 +96,7 @@ class Nacos implements Driver
      */
     public function server($service_name)
     {
-        return Request::get($this->host . $this->instancelist_uri, [
+        return Request::get($this->host . $this->instance_list_uri, [
             'serviceName' => $service_name
         ]);
     }

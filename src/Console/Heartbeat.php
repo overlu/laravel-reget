@@ -12,14 +12,25 @@ class Heartbeat extends Command
      *
      * @var string
      */
-    protected $signature = 'reget:heartbeat';
+    protected $signature = 'reget:heartbeat
+                            {--cron : Run the worker in cron mode (Deprecated)}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'check service heartbeat';
+    protected $description = 'send service heartbeat';
+
+    /**
+     * @var int
+     */
+    protected $loop = false;
+
+    /**
+     * @var int
+     */
+    protected $interval = 5000;
 
     /**
      * Create a new command instance.
@@ -36,10 +47,18 @@ class Heartbeat extends Command
      */
     public function handle()
     {
+        $demonize = $this->option('cron');
         try {
-            echo Reget::getInstance()->heartbeat();
+            $res = Reget::getInstance()->heartbeat();
+            $this->loop = $res['lightBeatEnabled'] ?? $this->loop;
+            $this->interval = $res['clientBeatInterval'] ?? $this->interval;
+            $this->info('ok');
         } catch (\Exception $exception) {
             $this->error("service heartbeat failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
+        }
+        if ($demonize && $this->loop) {
+            usleep($this->interval * 1000);
+            $this->handle();
         }
 
     }

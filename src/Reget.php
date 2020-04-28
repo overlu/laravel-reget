@@ -3,6 +3,8 @@
 namespace Overlu\Reget;
 
 
+use Exception;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -28,9 +30,9 @@ class Reget
 
     /**
      * @return Reget
-     * @throws \Exception
+     * @throws Exception
      */
-    public static function getInstance()
+    public static function getInstance(): Reget
     {
         if (!(self::$instance instanceof self)) {
             self::$instance = new self();
@@ -41,7 +43,7 @@ class Reget
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function init()
     {
@@ -51,26 +53,9 @@ class Reget
             $driverClass = "\\Overlu\\Reget\\Drivers\\" . $driver_name;
             $config = $this->getConfig();
             return new $driverClass($config);
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
-    }
-
-    /**
-     * @return array|false|mixed|string
-     */
-    private function getServerIp()
-    {
-        if (isset($_SERVER)) {
-            if ($_SERVER['SERVER_ADDR']) {
-                $serverIp = $_SERVER['SERVER_ADDR'];
-            } else {
-                $serverIp = $_SERVER['LOCAL_ADDR'];
-            }
-        } else {
-            $serverIp = getenv('SERVER_ADDR');
-        }
-        return $serverIp;
     }
 
     /**
@@ -82,38 +67,31 @@ class Reget
     }
 
     /**
-     * @return \Illuminate\Config\Repository|mixed|null
-     * @throws \Exception
+     * @return Repository|mixed|null
+     * @throws Exception
      */
     private function getConfig()
     {
-        $config = config('reget.' . $this->getDriver());
-        if (!$config['ip']) {
-            $config['ip'] = $this->getServerIp();
-        }
-        if (!$config['port']) {
-            $config['port'] = $this->getServerPort();
-        }
-        return $config;
+        return  config('reget.' . $this->getDriver());
     }
 
     /**
      * 获取驱动
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     private function getDriver(): string
     {
         $driver = config('reget.driver');
         if (!in_array($driver, $this->drivers)) {
-            throw new \Exception('illegal driver');
+            throw new Exception('illegal driver');
         }
         return $driver;
     }
 
     /**
-     * @return string
-     * @throws \Exception
+     * @return array
+     * @throws Exception
      */
     public function lists()
     {
@@ -121,26 +99,26 @@ class Reget
         if (!empty($lists)) {
             return $lists['doms'];
         }
-        return 'null';
+        return [];
     }
 
     /**
      * 心跳
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function heartbeat()
     {
         $res = $this->init()->heartbeat();
         Log::info("Heartbeat Response: " . $res);
-        return $res;
+        return json_decode($res, true);
     }
 
     /**
      * @param $name
      * @param bool $random
      * @return array|mixed|string|null
-     * @throws \Exception
+     * @throws Exception
      */
     public function service($name, $random = true)
     {
@@ -186,7 +164,7 @@ class Reget
      * @param $content : 配置内容
      * @param string $group : 配置分组
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function publish($dataId, $content, $group = 'DEFAULT_GROUP')
     {
@@ -198,7 +176,7 @@ class Reget
      * @param $dataId : 配置ID
      * @param string $group : 配置分组
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function remove($dataId, $group = 'DEFAULT_GROUP')
     {
@@ -227,7 +205,7 @@ class Reget
                         Command::info($message);
                     }
                 }
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $message = "【Reget】请求异常：" . trim($exception->getMessage());
                 Log::error($message);
                 if (App::runningInConsole()) {
