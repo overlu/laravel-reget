@@ -9,10 +9,10 @@ return [
         'weight' => env('NACOS_SERVICE_WEIGHT', 1),  // 权重
         'enabled' => env('NACOS_SERVICE_ENABLE', 'true'),  // 是否上线
         'healthy' => env('NACOS_SERVICE_HEALTHY', 'true'),  // 是否健康
-        'metadata' => env('NACOS_SERVICE_METADATA', ''),  // 扩展信息 json
-        'clusterName' => env('NACOS_SERVICE_CLUSTER_NAME', ''),  // 集群名
+        'metadata' => env('NACOS_SERVICE_METADATA', '{}'),  // 扩展信息 json
+        'clusterName' => env('NACOS_SERVICE_CLUSTER_NAME', 'DEFAULT'),  // 集群名
         'serviceName' => env('NACOS_SERVICE_NAME', 'server_name'), // 服务名
-        'groupName' => env('NACOS_SERVICE_GROUP_NAME', ''),  // 分组名
+        'groupName' => env('NACOS_SERVICE_GROUP_NAME', 'DEFAULT_GROUP'),  // 分组名
         'ephemeral' => env('NACOS_SERVICE_EPHEMERAL', 'true'), // 是否临时实例
         'scheduled' => env('NACOS_SERVICE_SCHEDULED', 'true')
     ]

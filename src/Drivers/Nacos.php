@@ -118,7 +118,7 @@ class Nacos implements Driver
      * @param string $group
      * @return bool|mixed|string
      */
-    public function config($dataId, $group = 'DEFAULT_GROUP')
+    public function config($dataId, $group)
     {
         return Request::get($this->host . $this->config_uri, [
             'dataId' => $dataId,
@@ -132,7 +132,7 @@ class Nacos implements Driver
      * @param string $group
      * @return bool|mixed|string
      */
-    public function publish($dataId, $content, $group = 'DEFAULT_GROUP')
+    public function publish($dataId, $content, $group)
     {
         return Request::post($this->host . $this->config_uri, [
             'content' => $content,
@@ -147,7 +147,7 @@ class Nacos implements Driver
      * @param string $group
      * @return bool|mixed|string
      */
-    public function remove($dataId, $group = 'DEFAULT_GROUP')
+    public function remove($dataId, $group)
     {
         return Request::delete($this->host . $this->config_uri, [
             'dataId' => $dataId,
@@ -162,7 +162,7 @@ class Nacos implements Driver
      * @param string $group
      * @return string
      */
-    public function listen(string $dataId, string $content, string $group = 'DEFAULT_GROUP')
+    public function listen(string $dataId, string $content, string $group)
     {
         // dataId^2Group^2contentMD5^2tenant^1
         $char2 = pack('C*', 2);

@@ -51,28 +51,20 @@ class Reget
             $driver = $this->getDriver();
             $driver_name = Str::studly($driver);
             $driverClass = "\\Overlu\\Reget\\Drivers\\" . $driver_name;
-            $config = $this->getConfig();
-            return new $driverClass($config);
+            return new $driverClass($this->getConfig());
         } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }
 
     /**
-     * @return mixed|string
-     */
-    private function getServerPort()
-    {
-        return $_SERVER['SERVER_PORT'] ?? '80';
-    }
-
-    /**
+     * @param string $key
      * @return Repository|mixed|null
      * @throws Exception
      */
-    private function getConfig()
+    private function getConfig($key = '')
     {
-        return  config('reget.' . $this->getDriver());
+        return $key ? config('reget.' . $this->getDriver() . '.' . $key) : config('reget.' . $this->getDriver());
     }
 
     /**
@@ -147,9 +139,11 @@ class Reget
      * @param string $group
      * @return mixed
      * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function config($dataId, $group = 'DEFAULT_GROUP')
+    public function config($dataId, $group = '')
     {
+        $group = $group ?? $this->getConfig('groupName');
         $config = ConfigCache::get($dataId, $group);
         if (!$config) {
             $config = $this->init()->config($dataId, $group);
@@ -166,8 +160,9 @@ class Reget
      * @return mixed
      * @throws Exception
      */
-    public function publish($dataId, $content, $group = 'DEFAULT_GROUP')
+    public function publish($dataId, $content, $group = '')
     {
+        $group = $group ?? $this->getConfig('groupName');
         return $this->init()->publish($dataId, $content, $group);
     }
 
@@ -178,8 +173,9 @@ class Reget
      * @return mixed
      * @throws Exception
      */
-    public function remove($dataId, $group = 'DEFAULT_GROUP')
+    public function remove($dataId, $group = '')
     {
+        $group = $group ?? $this->getConfig('groupName');
         return $this->init()->remove($dataId, $group);
     }
 
@@ -188,9 +184,11 @@ class Reget
      * @param string $dataId
      * @param string $group
      * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function listen(string $dataId, string $group = 'DEFAULT_GROUP')
+    public function listen(string $dataId, string $group = '')
     {
+        $group = $group ?? $this->getConfig('groupName');
         $num = 0;
         while (true) {
             try {
