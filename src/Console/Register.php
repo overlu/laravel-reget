@@ -5,6 +5,7 @@ namespace Overlu\Reget\Console;
 use Illuminate\Console\Command;
 use Overlu\Reget\Reget;
 use Overlu\Reget\Utils\Env;
+use Overlu\Reget\Utils\Tools;
 
 class Register extends Command
 {
@@ -42,12 +43,18 @@ class Register extends Command
             if ($this->option('init')) {
                 $this->serverInit();
             }
-            $this->info(Reget::getInstance()->init()->register());
+            if (Reget::getInstance()->init()->register() == 'ok') {
+                $this->info(Tools::json_pretty(Reget::getInstance()->init()->instance()));
+            }
         } catch (\Exception $exception) {
             $this->error("register service failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
     }
 
+    /**
+     * 初始化
+     * @return array
+     */
     private function serverInit()
     {
         $register_host = $this->ask("Enter the register host address(eg:http://127.0.0.1:8848)");

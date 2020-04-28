@@ -24,28 +24,29 @@ return [
         'ip' => env('NACOS_SERVICE_HOST', ''),   // 服务实例IP
         'port' => env('NACOS_SERVICE_PORT', ''), // 服务实例port
         'namespaceId' => env('NACOS_SERVICE_NAMESPACE_ID', ''), // 命名空间ID
-        'weight' => env('NACOS_SERVICE_WEIGHT', 1),  // 权重
+        'weight' => env('NACOS_SERVICE_WEIGHT', '0.8'),  // 权重
         'enabled' => env('NACOS_SERVICE_ENABLE', 'true'),  // 是否上线
         'healthy' => env('NACOS_SERVICE_HEALTHY', 'true'),  // 是否健康
-        'metadata' => env('NACOS_SERVICE_METADATA', ''),  // 扩展信息 json
-        'clusterName' => env('NACOS_SERVICE_CLUSTER_NAME', ''),  // 集群名
+        'metadata' => env('NACOS_SERVICE_METADATA', '{}'),  // 扩展信息 json
+        'clusterName' => env('NACOS_SERVICE_CLUSTER_NAME', 'DEFAULT'),  // 集群名
         'serviceName' => env('NACOS_SERVICE_NAME', 'server_name'), // 服务名
-        'groupName' => env('NACOS_SERVICE_GROUP_NAME', ''),  // 分组名
-        'ephemeral' => env('NACOS_SERVICE_EPHEMERAL', 'false'), // 是否临时实例
+        'groupName' => env('NACOS_SERVICE_GROUP_NAME', 'DEFAULT_GROUP'),  // 分组名
+        'ephemeral' => env('NACOS_SERVICE_EPHEMERAL', 'true'), // 是否临时实例
         'scheduled' => env('NACOS_SERVICE_SCHEDULED', 'true')
     ]
 ];
 ```
 修改配置文件`reget.php`，根据参数说明修改相关参数，或者__`在.env文件中加入相关参数配置(建议)`__
-> `ip`、`port`留空，系统会自动获取
 
 #### Usage
 ##### 常用命令
 ```php
 // 注册服务
 php artisan reget:register
+php artisan reget:register --init
 // 发送心跳
 php artisan reget:heartbeat
+php artisan reget:heartbeat --cron
 // 查看服务列表
 php artisan reget:list
 // 移除服务

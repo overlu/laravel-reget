@@ -13,8 +13,11 @@ class Nacos implements Driver
     //service
     protected $instance_uri = '/nacos/v1/ns/instance';
     protected $heartbeat_uri = '/nacos/v1/ns/instance/beat';
-    protected $server_list_uri = '/nacos/v1/ns/service/list';
+    protected $service_list_uri = '/nacos/v1/ns/service/list';
     protected $instance_list_uri = '/nacos/v1/ns/instance/list';
+
+    //server
+    protected $server_list_uri = '/nacos/v1/ns/operator/servers';
 
     // config
     protected $config_uri = '/nacos/v1/cs/configs';
@@ -41,6 +44,21 @@ class Nacos implements Driver
         }
 //        dump($this->service);
         return Request::post($this->host . $this->instance_uri, $this->service);
+    }
+
+    /**
+     * 集群Server列表
+     * @return string
+     */
+    public function servers()
+    {
+        return Request::get($this->host . $this->server_list_uri, [
+            'healthy' => 'true'
+        ]);
+    }
+
+    public function instance(){
+        return Request::get($this->host . $this->instance_uri, $this->service);
     }
 
     /**
@@ -78,7 +96,6 @@ class Nacos implements Driver
      */
     public function lists()
     {
-
         return Request::get($this->host . $this->instance_uri, $this->service);
     }
 
@@ -86,9 +103,9 @@ class Nacos implements Driver
      * 服务列表
      * @return bool|mixed|string
      */
-    public function servers()
+    public function services()
     {
-        return Request::get($this->host . $this->server_list_uri, [
+        return Request::get($this->host . $this->service_list_uri, [
             'pageNo' => 1,
             'pageSize' => 99999
         ]);
@@ -99,12 +116,13 @@ class Nacos implements Driver
      * @param $service_name
      * @return bool|mixed|string
      */
-    public function server($service_name)
+    public function service($service_name)
     {
         return Request::get($this->host . $this->instance_list_uri, [
             'serviceName' => $service_name
         ]);
     }
+
 
     /**
      * 移除服务

@@ -37,7 +37,8 @@ class Remove extends Command
     public function handle()
     {
         try {
-            echo Reget::getInstance()->init()->delete();
+            $res = Reget::getInstance()->init()->delete();
+            $this->info("Remove instance: " . $res);
         } catch (\Exception $exception) {
             $this->error("remove service failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }

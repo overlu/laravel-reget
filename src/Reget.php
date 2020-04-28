@@ -87,7 +87,7 @@ class Reget
      */
     public function lists()
     {
-        $lists = json_decode($this->init()->servers(), true);
+        $lists = json_decode($this->init()->services(), true);
         if (!empty($lists)) {
             return $lists['doms'];
         }
@@ -107,6 +107,7 @@ class Reget
     }
 
     /**
+     * 获取服务地址
      * @param $name
      * @param bool $random
      * @return array|mixed|string|null
@@ -116,12 +117,13 @@ class Reget
     {
         $lists = $this->lists();
         if (in_array($name, $lists)) {
-            $hosts = json_decode($this->init()->server($name), true)['hosts'];
+            $hosts = json_decode($this->init()->service($name), true)['hosts'];
             if ($hosts) {
                 if ($random) {
                     $host = Arr::random($hosts);
                     return $host['port'] == '80' ? $host['ip'] : $host['ip'] . ':' . $host['port'];
                 }
+                $temp = [];
                 foreach ($hosts as $host) {
                     $temp[] = $host['port'] == '80' ? $host['ip'] : $host['ip'] . ':' . $host['port'];
                 }
@@ -143,7 +145,7 @@ class Reget
      */
     public function config($dataId, $group = '')
     {
-        $group = $group ?? $this->getConfig('groupName');
+        $group = $group ?: $this->getConfig('groupName');
         $config = ConfigCache::get($dataId, $group);
         if (!$config) {
             $config = $this->init()->config($dataId, $group);
@@ -162,7 +164,7 @@ class Reget
      */
     public function publish($dataId, $content, $group = '')
     {
-        $group = $group ?? $this->getConfig('groupName');
+        $group = $group ?: $this->getConfig('groupName');
         return $this->init()->publish($dataId, $content, $group);
     }
 
@@ -175,7 +177,7 @@ class Reget
      */
     public function remove($dataId, $group = '')
     {
-        $group = $group ?? $this->getConfig('groupName');
+        $group = $group ?: $this->getConfig('groupName');
         return $this->init()->remove($dataId, $group);
     }
 
@@ -188,7 +190,7 @@ class Reget
      */
     public function listen(string $dataId, string $group = '')
     {
-        $group = $group ?? $this->getConfig('groupName');
+        $group = $group ?: $this->getConfig('groupName');
         $num = 0;
         while (true) {
             try {

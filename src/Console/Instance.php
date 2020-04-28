@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use Overlu\Reget\Reget;
 use Overlu\Reget\Utils\Tools;
 
-class Lists extends Command
+class Instance extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'reget:list';
+    protected $signature = 'reget:instance';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'pull service list';
+    protected $description = 'pull instance detail information';
 
     /**
      * Create a new command instance.
@@ -38,9 +38,9 @@ class Lists extends Command
     public function handle()
     {
         try {
-            $this->info(Tools::json_pretty(Reget::getInstance()->init()->services()));
+            $this->info(Tools::json_pretty(Reget::getInstance()->init()->instance()));
         } catch (\Exception $exception) {
-            $this->error("pull service list failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
+            $this->error("pull instance info failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
     }
 }
