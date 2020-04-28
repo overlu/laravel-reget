@@ -47,19 +47,17 @@ class Heartbeat extends Command
      */
     public function handle()
     {
-        $demonize = $this->option('cron');
         try {
             $res = Reget::getInstance()->heartbeat();
             $this->loop = $res['lightBeatEnabled'] ?? $this->loop;
             $this->interval = $res['clientBeatInterval'] ?? $this->interval;
-            $this->info('ok');
+            $this->info('send heartbeat: ok');
         } catch (\Exception $exception) {
             $this->error("service heartbeat failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
-        if ($demonize && $this->loop) {
+        if ($this->option('cron') && $this->loop) {
             usleep($this->interval * 1000);
             $this->handle();
         }
-
     }
 }

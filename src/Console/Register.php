@@ -13,14 +13,15 @@ class Register extends Command
      *
      * @var string
      */
-    protected $signature = 'reget:register';
+    protected $signature = 'reget:register
+                           {--init : initialize the register config}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'register service';
+    protected $description = 'register service and instance';
 
     /**
      * Create a new command instance.
@@ -38,7 +39,9 @@ class Register extends Command
     public function handle()
     {
         try {
-            $this->serverInit();
+            if ($this->option('init')) {
+                $this->serverInit();
+            }
             $this->info(Reget::getInstance()->init()->register());
         } catch (\Exception $exception) {
             $this->error("register service failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
@@ -70,13 +73,13 @@ class Register extends Command
             $this->error("Illegal input");
             $this->serverInit();
         }
-        $env = new Env();
         $server = [
             'NACOS_REGISTER_HOST' => $register_host,
             'NACOS_SERVICE_NAME' => $instance_name,
             'NACOS_SERVICE_HOST' => $arr[$index - 1],
             'NACOS_SERVICE_PORT' => $port
         ];
-        $env->setEnvs($server);
+        (new Env())->setEnvs($server);
+        return $server;
     }
 }

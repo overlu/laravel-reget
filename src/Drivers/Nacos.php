@@ -31,10 +31,15 @@ class Nacos implements Driver
 
     /**
      * 注册
-     * @return bool|mixed|string
+     * @param array $server
+     * @return mixed|string
      */
-    public function register()
+    public function register($server = [])
     {
+        if (!empty($server)) {
+            $this->service = $server + $this->service;
+        }
+//        dump($this->service);
         return Request::post($this->host . $this->instance_uri, $this->service);
     }
 

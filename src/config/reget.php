@@ -6,7 +6,7 @@ return [
         'ip' => env('NACOS_SERVICE_HOST', ''),   // 服务实例IP
         'port' => env('NACOS_SERVICE_PORT', ''), // 服务实例port
         'namespaceId' => env('NACOS_SERVICE_NAMESPACE_ID', ''), // 命名空间ID
-        'weight' => env('NACOS_SERVICE_WEIGHT', 1),  // 权重
+        'weight' => env('NACOS_SERVICE_WEIGHT', '0.8'),  // 权重
         'enabled' => env('NACOS_SERVICE_ENABLE', 'true'),  // 是否上线
         'healthy' => env('NACOS_SERVICE_HEALTHY', 'true'),  // 是否健康
         'metadata' => env('NACOS_SERVICE_METADATA', '{}'),  // 扩展信息 json

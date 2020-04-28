@@ -77,7 +77,7 @@ class Env
      */
     public function setEnvs(array $data): void
     {
-        if($this->isLastLineEmpty()){
+        if(!$this->isLastLineEmpty()){
             file_put_contents($this->env_file, PHP_EOL, FILE_APPEND);
         }
         foreach ($data as $key => $value) {

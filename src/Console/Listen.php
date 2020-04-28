@@ -44,6 +44,5 @@ class Listen extends Command
         } catch (\Exception $exception) {
             $this->error("listen failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
-
     }
 }

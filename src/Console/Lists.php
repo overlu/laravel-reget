@@ -37,9 +37,19 @@ class Lists extends Command
     public function handle()
     {
         try {
-            echo Reget::getInstance()->init()->servers();
+            $this->info($this->json_pretty(Reget::getInstance()->init()->servers()));
         } catch (\Exception $exception) {
             $this->error("list service failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
     }
+
+    private function json_pretty($json): string
+    {
+        if (is_array($json)) {
+            return json_encode($json, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        }
+        $json = json_decode($json, true);
+        return json_encode($json, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+
 }
