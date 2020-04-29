@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Overlu\Reget\Listeners\ConfigListener;
 use Overlu\Reget\Utils\Command;
 use Overlu\Reget\Utils\ConfigCache;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -185,13 +186,17 @@ class Reget
     /**
      * 监听配置
      * @param string $dataId
+     * @param string $handle
      * @param string $group
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function listen(string $dataId, string $group = '')
+    public function listen(string $dataId, string $handle = '', string $group = '')
     {
         $group = $group ?: $this->getConfig('groupName');
+        if ($handle) {
+            ConfigListener::add($handle);
+        }
         $num = 0;
         while (true) {
             try {

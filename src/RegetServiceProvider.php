@@ -35,6 +35,7 @@ class RegetServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/config/reget.php' => config_path('reget.php'), // 发布配置文件到 laravel 的config 下
+            __DIR__.'/Listeners/ConfigChangedShouldDoSomething.php' => app_path('Listeners/ConfigChangedShouldDoSomething.php')
         ]);
         $this->commands([Register::class, Heartbeat::class, Remove::class, Lists::class, Listen::class, Instance::class]);
     }

@@ -42,7 +42,7 @@ class Nacos implements Driver
         if (!empty($server)) {
             $this->service = $server + $this->service;
         }
-//        dump($this->service);
+//        dd($this->service);
         return Request::post($this->host . $this->instance_uri, $this->service);
     }
 

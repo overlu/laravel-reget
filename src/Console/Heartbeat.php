@@ -56,7 +56,7 @@ class Heartbeat extends Command
             $this->error("service heartbeat failed. error message: " . $exception->getMessage() . ', on file: ' . $exception->getFile() . ', at line: ' . $exception->getLine());
         }
         if ($this->option('cron') && $this->loop) {
-            usleep($this->interval * 1000);
+            usleep($this->interval * 500);
             $this->handle();
         }
     }

@@ -7,7 +7,7 @@
 ```bash
 php composer.phar require overlu/laravel-reget
 ```
-2. 配置（可选）
+2. 配置
 ```bash
 # publish config 
 php artisan vendor:publish --provider="Overlu\Reget\RegetServiceProvider"

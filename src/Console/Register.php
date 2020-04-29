@@ -40,10 +40,11 @@ class Register extends Command
     public function handle()
     {
         try {
+            $service = [];
             if ($this->option('init')) {
-                $this->serverInit();
+                $service = $this->serverInit();
             }
-            if (Reget::getInstance()->init()->register() == 'ok') {
+            if (Reget::getInstance()->init()->register($service) == 'ok') {
                 $this->info(Tools::json_pretty(Reget::getInstance()->init()->instance()));
             }
         } catch (\Exception $exception) {
@@ -60,7 +61,7 @@ class Register extends Command
         $register_host = $this->ask("Enter the register host address(eg:http://127.0.0.1:8848)");
         if (!preg_match('|[a-zA-z]+://[^\s]*|', $register_host)) {
             $this->error("Illegal input");
-            $this->serverInit();
+            exit;
         }
         $instance_name = $this->ask("Enter the instance name(" . env('APP_NAME') . ")") ?? env('APP_NAME');
         exec("ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'", $arr);
@@ -73,12 +74,12 @@ class Register extends Command
         $index = $this->ask("Choose the instance ip address (1)") ?? 1;
         if (!isset($arr[$index - 1])) {
             $this->error("Illegal input");
-            $this->serverInit();
+            exit;
         }
         $port = $this->ask("Enter the instance port (80)") ?? 80;
         if ($port > 65535 || $port < 1) {
             $this->error("Illegal input");
-            $this->serverInit();
+            exit;
         }
         $server = [
             'NACOS_REGISTER_HOST' => $register_host,
@@ -87,6 +88,11 @@ class Register extends Command
             'NACOS_SERVICE_PORT' => $port
         ];
         (new Env())->setEnvs($server);
-        return $server;
+        return [
+            'register_host' => $register_host,
+            'serviceName' => $instance_name,
+            'ip' => $arr[$index - 1],
+            'port' => $port
+        ];
     }
 }
