@@ -3,6 +3,7 @@
 namespace Overlu\Reget\Console;
 
 use Illuminate\Console\Command;
+use Overlu\Reget\Listeners\ConfigListener;
 use Overlu\Reget\Reget;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -13,7 +14,8 @@ class Listen extends Command
      *
      * @var string
      */
-    protected $signature = 'reget:listen {config}';
+    protected $signature = 'reget:listen {config}
+                            {--handle= : add handle class}';
 
     /**
      * The console command description.
@@ -39,6 +41,9 @@ class Listen extends Command
     public function handle()
     {
         try {
+            if ($handle = $this->option('handle')) {
+                ConfigListener::add($handle);
+            }
             $config = $this->argument('config');
             Reget::getInstance()->listen($config);
         } catch (\Exception $exception) {

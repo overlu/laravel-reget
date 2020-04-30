@@ -4,21 +4,21 @@
 
 #### 安装
 1. 引入扩展库
-```bash
+```
 php composer.phar require overlu/laravel-reget
 ```
 2. 配置
-```bash
+```php
 # publish config 
 php artisan vendor:publish --provider="Overlu\Reget\RegetServiceProvider"
 ```
 3. 注册服务提供者（laravel5.5之前需要操作）
-```bash
+```php
 # 打开 config/app.php，注册如下服务提供者到 $providers 数组
 Overlu\Reget\RegetServiceProvider::class
 ```
-4. 注册Facade（可选）
-```bash
+4. 注册Facade
+```php
 # 然后添加如下门面到 $aliaes 数组
 'Reget' => \Overlu\Reget\Facades\Reget::class
 ```
@@ -49,51 +49,53 @@ Overlu\Reget\RegetServiceProvider::class
 #### Usage
 ##### 常用命令
 * 注册服务
-```bash
+```shell
 php artisan reget:register  // 根据配置文件注册
 ```
 ![J5YOe0.png](https://s1.ax1x.com/2020/04/28/J5YOe0.png)  
-```bash
+```shell
 php artisan reget:register --init  // 初始化配置并注册
 ```
 ![J5tYtS.png](https://s1.ax1x.com/2020/04/28/J5tYtS.png)  
 
 * 发送心跳
-```bash
+```shell
 php artisan reget:heartbeat   // 发送一次
 ```
 ![J5NGuR.png](https://s1.ax1x.com/2020/04/28/J5NGuR.png)  
-```bash
+```shell
 php artisan reget:heartbeat --cron  // 定时发送
 ```
 ![J5NR58.png](https://s1.ax1x.com/2020/04/28/J5NR58.png)  
 
 * 查看服务列表
-```bash
+```shell
 php artisan reget:list
 ```
 ![J5UmMd.png](https://s1.ax1x.com/2020/04/28/J5UmMd.png)  
 
 * 查看当前实例详情
-```bash
+```shell
 php artisan reget:instance
 ```
 ![J5UjTP.png](https://s1.ax1x.com/2020/04/28/J5UjTP.png)  
 
 * 移除当前实例
-```bash
+```shell
 php artisan reget:remove
 ```
 ![J5awXd.png](https://s1.ax1x.com/2020/04/28/J5awXd.png)  
 
 * 监听配置
-```bash
+```shell
 php artisan reget:listen key
+# 加入观察者
+php artisan reget:listen key --handle="Namespace\ClassName"
 ```
 ![J58PVU.png](https://s1.ax1x.com/2020/04/28/J58PVU.png)   
 
 #####  ~~定时发送心跳（不建议）~~
-```bash
+```shell
 # 1. 下面的 Cron 添加到你的服务器中
 * * * * * cd /path-to-your-project && php artisan schedule:run >>/dev/null 2>&1
 ```
@@ -105,7 +107,7 @@ protected function schedule(Schedule $schedule)
 }
 ```
 ##### 定时发送心跳
-```bash
+```shell
 php artisan reget:heartbeat --cron # 联调测试用
 # or
 php artisan reget:heartbeat --cron>>/dev/null 2>&1 &
@@ -154,8 +156,37 @@ $response = Reget::remove('key');
 Reget::listen('key'); # 可以curl请求路由
 ```
 or
-```bash
+```shell
 php artisan reget:listen key
+```
+or 加入观察者
+```php
+php artisan reget:listen key --handle="Namespace\ClassName"
+
+<?php
+
+namespace Namespace;
+
+Class ClassName
+{
+    /**
+     * @param $key
+     * @param $data
+     * @param $originData
+     */
+    public static function handle($key, $data, $originData)
+    {
+        dd($key, $data, $originData);
+    }
+
+    /**
+     * @param \Exception $exception
+     */
+    public static function error(\Exception $exception)
+    {
+        dd($exception->getCode());
+    }
+}
 ```
 ![J58PVU.png](https://s1.ax1x.com/2020/04/28/J58PVU.png)  
 

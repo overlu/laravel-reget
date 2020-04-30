@@ -10,6 +10,9 @@ class Nacos implements Driver
 {
     use Base;
 
+    private $service;
+    private $host;
+
     //service
     protected $instance_uri = '/nacos/v1/ns/instance';
     protected $heartbeat_uri = '/nacos/v1/ns/instance/beat';
@@ -42,7 +45,6 @@ class Nacos implements Driver
         if (!empty($server)) {
             $this->service = $server + $this->service;
         }
-//        dd($this->service);
         return Request::post($this->host . $this->instance_uri, $this->service);
     }
 
@@ -68,24 +70,24 @@ class Nacos implements Driver
     public function heartbeat()
     {
         $keys = ["cluster", "ip", "metadata", "port", "scheduled", "serviceName", "weight"];
-        $service = $this->service;
-        $service['cluster'] = $service['clusterName'];
-        foreach ($service as $key => $value) {
+        $ser = $this->service;
+        $ser['cluster'] = $ser['clusterName'];
+        foreach ($ser as $key => $value) {
             if (!in_array($key, $keys)) {
-                unset($service[$key]);
+                unset($ser[$key]);
             }
             if ($key == 'metadata') {
-                $metadata = json_decode($service[$key]);
+                $metadata = json_decode($ser[$key]);
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    $service[$key] = (object)[];
+                    $ser[$key] = (object)[];
                 } else {
-                    $service[$key] = (object)$metadata;
+                    $ser[$key] = (object)$metadata;
                 }
             }
         }
         $params = [
             'serviceName' => $this->service['serviceName'],
-            'beat' => json_encode($service)
+            'beat' => json_encode($ser)
         ];
         return Request::put($this->host . $this->heartbeat_uri, $params);
     }

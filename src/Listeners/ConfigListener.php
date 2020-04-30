@@ -44,6 +44,16 @@ class ConfigListener
     }
 
     /**
+     * 通知错误
+     */
+    public static function error(): void
+    {
+        foreach (static::$observers as $observer) {
+            call_user_func_array([$observer, 'error'], func_get_args());
+        }
+    }
+
+    /**
      * @return array
      */
     public static function observers(): array

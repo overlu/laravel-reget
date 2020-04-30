@@ -116,7 +116,7 @@ class Reget
      */
     public function service($name, $random = true)
     {
-        $lists = $this->lists();
+        $lists = $this->services();
         if (in_array($name, $lists)) {
             $hosts = json_decode($this->init()->service($name), true)['hosts'];
             if ($hosts) {
@@ -205,6 +205,7 @@ class Reget
                 if ($this->init()->listen($dataId, $content, $group)) { // 配置发生了变化
                     $config = $this->init()->config($dataId, $group);
                     ConfigCache::set($dataId, $group, $config);
+                    ConfigListener::notify($dataId, $config, $content);
                     $message = "【Reget】发现变更配置：" . $dataId . " :" . $content . " => " . $config;
                     Log::info($message);
                     if (App::runningInConsole()) {
@@ -212,6 +213,7 @@ class Reget
                     }
                 }
             } catch (Exception $exception) {
+                ConfigListener::error($exception);
                 $message = "【Reget】请求异常：" . trim($exception->getMessage());
                 Log::error($message);
                 if (App::runningInConsole()) {
