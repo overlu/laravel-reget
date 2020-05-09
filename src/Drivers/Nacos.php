@@ -87,6 +87,7 @@ class Nacos implements Driver
         }
         $params = [
             'serviceName' => $this->service['serviceName'],
+            'namespaceId' => $this->service['namespaceId'],
             'beat' => json_encode($ser)
         ];
         return Request::put($this->host . $this->heartbeat_uri, $params);
