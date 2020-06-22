@@ -198,8 +198,8 @@ class Nacos implements Driver
         $char2 = pack('C*', 2);
         return Request::post($this->host . $this->config_listen_uri, [
             'Listening-Configs' => $this->service['namespaceId']
-                ? $dataId . $char2 . $group . $char2 . md5($content) . pack('C*', 1)
-                : $dataId . $char2 . $group . $char2 . md5($content) . $char2 . $this->service['namespaceId'] . pack('C*', 1)
+                ? $dataId . $char2 . $group . $char2 . md5($content) . $char2 . $this->service['namespaceId'] . pack('C*', 1)
+                : $dataId . $char2 . $group . $char2 . md5($content) . pack('C*', 1)
         ], [
             'Long-Pulling-Timeout' => 30000
         ]);
